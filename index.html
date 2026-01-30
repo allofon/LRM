@@ -62,6 +62,9 @@ h2, h3 {
   justify-content: center;
   margin-bottom: 20px;
 }
+#entityAnswers .answer {
+  cursor: pointer;
+}
 
 .answer {
   padding: 10px 14px;
@@ -695,14 +698,6 @@ selectedEntity = null;
 bindEntityAnswers();
 bindCategorySlots();
 
-/* ========= ENTITETSFRÅGA: KLICK = ÅNGRA ========= */
-document.querySelectorAll('#entityAnswers .answer, .category .answer-slot .answer')
-  .forEach(a => {
-    a.addEventListener('click', () => {
-      a.classList.remove('selected', 'right', 'wrong');
-      document.getElementById('entityAnswers').appendChild(a);
-    });
-  });
 
 
 
