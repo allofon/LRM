@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<title>Entiteter och relationer – quiz</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #eef2f3;
+  margin: 40px;
+}
+.answer {
+  padding: 10px 14px;/* Vertikala svarsalternativ för fråga 2 */
+
+  background: #ffeaa7;
+  border: 2px solid #fdcb6e;
+  border-radius: 10px;
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smidig övergång */
+}
+/* ===== KLICKVAL (alla frågor utom entiteter) ===== */
+.relation .answer {
+  cursor: pointer;
+}
+.answer.selected {
+  animation: pop 0.25s ease;
+}
+
+@keyframes pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.12); }
+  100% { transform: scale(1.05); }
+}
+.answer.selected {
+  background: #55efc4;
+  border-color: #00b894;
+  box-shadow: 0 0 0 3px rgba(0, 184, 148, 0.4);
+  transform: scale(1.05);
+}
+.answer:hover {
+  transform: scale(1.1); /* Zooma upp svarsalternativet vid hover */
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3); /* Lägger till en skugga för mer effekt */
+}
+
+h2, h3 {
+  text-align: center;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ===== SVAR ===== */
+.answers {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.answer {
+  padding: 10px 14px;
+  background: #ffeaa7;
+  border: 2px solid #fdcb6e;
+  border-radius: 10px;
+  cursor: grab;
+  user-select: none;
+}
+
+.answer:hover {
+  background: #ffd86b;
+}
+.answer:hover {
+  transform: scale(1.08) rotate(-0.5deg);
+}
+
+.answer.correct-answer {
+  border: 3px dashed #0984e3;
+  background: none;
+}
+
+.answer.wrong {
+  background: #fab1a0;
+  border-color: #d63031;
+}
+
+.answer.right {
+ background: none;
+  border-color: none;
+  box-shadow: none;
+}
+
+
+/* ===== KATEGORIER ===== */
+.category-row {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.category {
+  text-align: center;
+}
+
+
+.answer-slot {
+  width: 260px;
+  height: 80px;
+  border: 3px solid #999;
+  background: #fff;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== RELATIONER ===== */
+.relation {
+  margin-top: 40px;
+}
+
+.relation .answer-slot {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.relation {
+  animation: fadeInUp 0.4s ease both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.relation {
+  counter-increment: question;
+}
+
+.container {
+  counter-reset: question;
+}
+
+.relation h2:first-of-type::before {
+  content: "Fråga " counter(question) ". ";
+  font-weight: bold;
+  color: #0984e3;
+}
+
+
+/* ===== TVÅ SVARRUTOR I RAD ===== */
+
+
+/* ===== EXCEL ===== */
+.excel-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 160px);
+  gap: 12px;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.excel-head {
+  text-align: center;
+  font-weight: bold;
+}
+
+.excel-cell {
+  height: 45px;
+  text-align: center;
+  font-size: 15px;
+  border: 2px solid #999;
+  border-radius: 6px;
+}
+
+.excel-cell:focus {
+  outline: none;
+  border-color: #0984e3;
+}
+
+/* ===== KNAPPAR ===== */
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+button {
+  padding: 14px 30px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#feedback {
+  max-width: 800px;
+  margin: 40px auto;
+  text-align: center;
+}
+
+#feedback ul {
+  list-style-position: inside;
+  padding-left: 0;
+  margin: 10px auto 25px auto;
+  display: inline-block;
+  text-align: left;
+}
+.relation .answers {
+  margin-top: 12px;   /* minska detta värde om du vill ännu närmare */
+}
+
+/* ===== DÖLJ SVARSBOXAR FÖR ALLA FRÅGOR UTOM ENTITETER ===== */
+
+/* Dölj alla answer-slots som ligger i .relation */
+.relation .answer-slot {
+  display: none;
+}
+/* Vertikala svarsalternativ för fråga 2 */
+#rel5 {
+  display: flex;
+  flex-direction: column;
+  align-items: center ;
+}
+/* ===== VISUELL SEPARATION AV FRÅGOR ===== */
+.relation {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 25px 30px;
+  margin: 40px auto;
+  max-width: 900px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  border-left: 6px solid #74b9ff;
+}
+
+/* Lite variation varannan fråga */
+.relation:nth-of-type(even) {
+  border-left-color: #55efc4;
+}
+
+/* Rubrikspacing */
+.relation h2,
+.relation h3 {
+  margin: 10px 0;
+}
+  
+/* ===== ENTITETSFRÅGA: INGEN RÄTT/FEL-FÄRG ===== */
+#entityAnswers .answer,
+.category .answer-slot .answer {
+  background: #ffeaa7 !important;
+  border-color: #fdcb6e !important;
+  box-shadow: none !important;
+}
+
+.red {
+  color: red;
+  }
+ 
+ /* ===== 8-BIT RETRO WIN SCREEN ===== */
+#retroWin.hidden {
+  display: none;
+}
+
+#retroWin {
+  position: fixed;
+  inset: 0;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.retro-box {
+  border: 4px solid white;
+  padding: 30px 40px;
+  text-align: center;
+  color: white;
+  font-family: "Courier New", monospace;
+  animation: popIn 0.4s steps(5);
+}
+
+.blink {
+  font-size: 3rem;
+  animation: blink 1s steps(2) infinite;
+}
+
+.press {
+  margin-top: 20px;
+  font-size: 1rem;
+  animation: blink 1.2s steps(2) infinite;
+}
+
+#scoreCount {
+  font-size: 2.5rem;
+  margin: 10px 0;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+@keyframes popIn {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+  
+</style>
+</head>
+
+<body>
+<h1 style="text-align: center; color: #2d3436; margin-bottom: 20px;">Lite LRM-relaterade frågor</h1>
+
+<div class="container">
+
+<div class="relation" data-max="1">
+  <h2>
+    Vad för slags entitet är idén om filmen <em>Babe - en gris kommer till stan?</em>
+  </h2>
+
+  <div class="answers">
+    <div class="answer correct">Verk</div>
+    <div class="answer">Uttryck</div>
+    <div class="answer">Manifestation</div>
+    <div class="answer">Exemplar</div>
+  </div>
+</div>
+
+<div class="relation" data-max="1">
+  <h2>
+    Vad för slags entitet var Boråsbandet Moonlit Sailor?
+  </h2>
+
+  <div class="answers">
+    <div class="answer">Nomen</div>
+    <div class="answer correct">Kollektiv agent</div>
+    <div class="answer">Exemplar</div>
+    <div class="answer">Plats</div>
+  </div>
+</div>
+
+<div class="relation" data-max="1">
+  <h2>
+    Kan en hamster vara en agent?
+  </h2>
+
+  <div class="answers">
+    <div class="answer">Ja</div>
+    <div class="answer correct">Nej</div>
+    <div class="answer">Ja, men bara på lördagar</div>
+  </div>
+</div>
+
+<div class="relation" data-max="1">
+  <h2>
+    Är idén om datorprogrammet <em>Microsoft Excel</em> en entitet?
+  </h2>
+
+  <div class="answers">
+    <div class="answer correct">Ja</div>
+    <div class="answer">Nej</div>
+    <div class="answer">Kanske</div>
+  </div>
+</div>
+
+<div class="relation" data-type="entity">
+<h2>Dra entitet-instanserna till de rätta rutorna.</h2>
+<h3>Ett angivet svar kan ångras om du <em>klickar</em> på det (det går tyvärr inte att dra tillbaka ett angivet svar).</h3>
+<!-- ===== ENTITETSSVAR ===== -->
+<div class="answers" id="entityAnswers">
+  <div class="answer" draggable="true" data-origin="entityAnswers" data-cat="Verk">Idén om det litterära verket <em>Gösta Berlings saga</em></div>
+  <div class="answer" draggable="true" data-origin="entityAnswers" data-cat="Uttryck">Den svenska texten av <em>Gösta Berlings saga</em>, ©1891</div>
+  <div class="answer" draggable="true" data-origin="entityAnswers" data-cat="Manifestation">1891 års häftade utgåva av GBS med ISBN x</div>
+  <div class="answer" draggable="true" data-origin="entityAnswers" data-cat="Exemplar">Den fysiska, solblekta kopian av GBS i din bokhylla</div>
+  <div class="answer" draggable="true" data-origin="entityAnswers" data-cat="Person">Selma Lagerlöf (människan)</div>
+  <div class="answer" draggable="true" data-origin="entityAnswers" data-cat="Kollektiv">Albert Bonniers Förlag</div>
+  <div class="answer" draggable="true" data-origin="entityAnswers" data-cat="Nomen">"Selma Lagerlöf"</div>
+  <div class="answer" draggable="true" data-origin="entityAnswers" data-cat="Plats">Stockholm</div>
+  <div class="answer" draggable="true" data-origin="entityAnswers" data-cat="Tid">1891</div>
+</div></div>
+
+<!-- ===== KATEGORIER ===== -->
+<div class="category-row">
+  <div class="category"><strong>Verk</strong><div class="answer-slot" data-cat="Verk"></div></div>
+  <div class="category"><strong>Uttryck</strong><div class="answer-slot" data-cat="Uttryck"></div></div>
+  <div class="category"><strong>Manifestation</strong><div class="answer-slot" data-cat="Manifestation"></div></div>
+</div>
+
+<div class="category-row">
+  <div class="category"><strong>Exemplar</strong><div class="answer-slot" data-cat="Exemplar"></div></div>
+  <div class="category"><strong>Person</strong><div class="answer-slot" data-cat="Person"></div></div>
+  <div class="category"><strong>Kollektiv agent</strong><div class="answer-slot" data-cat="Kollektiv"></div></div>
+</div>
+
+<div class="category-row">
+  <div class="category"><strong>Nomen</strong><div class="answer-slot" data-cat="Nomen"></div></div>
+  <div class="category"><strong>Plats</strong><div class="answer-slot" data-cat="Plats"></div></div>
+  <div class="category"><strong>Tidsspann</strong><div class="answer-slot" data-cat="Tid"></div></div>
+</div>
+</div>
+
+<!-- ===== LRM: ENTITETER VS ATTRIBUT ===== -->
+<div class="relation"
+     data-max="2"
+     data-correct="utgivningsår, omfång">
+  <h2>
+    Vilka är de två <em>attributen</em> av följande alternativ?
+    <h3>Klicka på de rätta svaren.</h3>
+  </h2>
+
+  <div class="answers">
+    <div class="answer">Agent</div>
+    <div class="answer correct">Utgivningsår</div>
+    <div class="answer">Nomen</div>
+    <div class="answer correct">Omfång</div>
+  </div>
+</div>
+
+<!-- ===== FRÅGA 2 ===== -->
+<div class="relation" data-max="2">
+<h2>Enbart <em>två</em> av dessa påståenden är korrekta, vilka?</h2>
+
+<div class="answers" id="rel5">
+  <div class="answer correct">
+    Ett verk kan ha flera uttryck på olika språk.</div>
+  <div class="answer">
+    Ett uttryck identifieras genom ISBN.
+  </div>
+  <div class="answer correct">
+    En manifestation anger ett uttrycks publiceringsform.
+  </div>
+  <div class="answer">
+    Ett exemplar är en abstrakt konstnärlig skapelse.
+  </div>
+</div>
+
+<div class="slot-row">
+  <div class="answer-slot" id="relSlot5a"></div>
+  <div class="answer-slot" id="relSlot5b"></div>
+</div>
+</div>
+
+<!-- ===== RELATION 1 ===== -->
+<div class="relation" data-max="1" data-correct="skapades av">
+<h2>Enbart <em>en</em> av följande relationer kan förekomma mellan uttryck och agent, vilken?</h2>
+
+  <div class="answers">
+    <div class="answer correct">skapades av</div>
+    <div class="answer">är likvärdig med</div>
+    <div class="answer">tilldelade</div>
+      </div>
+</div>
+
+<!-- ===== RELATION 2 ===== -->
+<div class="relation" data-max="1" data-correct="distribueras av">
+<h2>En av följande relationer kan <em>inte</em> förekomma mellan två nomen, vilken?</h2>
+
+  <div class="answers">
+    <div class="answer">är likvärdig med</div>
+    <div class="answer correct">distribueras av</div>
+    <div class="answer">är härlett från</div>
+      </div>
+</div>
+
+<div class="relation" data-max="1">
+  <h2>
+    Vad innebär en <em>rekursiv</em> relation (mellan entiteter)?
+  </h2>
+
+  <div class="answers">
+    <div class="answer">Att relationen och dess invers är av samma slag (E1 är likvärdigt med E2)</div>
+    <div class="answer correct">Att samma typ av entitet är både domän och räckvidd (Verk - Verk)</div>
+  </div>
+</div>
+
+<!-- ===== LRM: SUBKLASSER ===== -->
+<div class="relation" data-max="2">
+  <h2>
+    Vilka <em>två</em> entiteter tillhör entitetshierarkins "nedersta" subklass?</h2>
+    <h2>(De tillhör en subklass' subklass)</h2>
+  <div class="answers">
+    <div class="answer">Uttryck</div>
+    <div class="answer">Manifestation</div>
+    <div class="answer correct">Person</div>
+    <div class="answer">Nomen</div>
+    <div class="answer correct">Kollektiv agent</div>
+    <div class="answer">Plats</div>
+  </div>
+</div>
+
+<!-- ===== RELATION 3 ===== -->
+<div class="relation" data-max="1">
+<h2><strong><span class="red">VERK har som ämne "…" har benämning (appellation) NOMEN.</span></strong></h2>
+<h2>Vilken entitet binder samman ovanstående flerstegs-relation? Om VERK = den svenska ljudboken <em>Bamse på skattjakt</em>, ©1997 och NOMEN = "Bamse".</h2>
+<div style="text-align:center;font-size:22px;">
+</div>
+
+  <div class="answers">
+    <div class="answer">EXEMPLAR</div>
+    <div class="answer correct">RES</div>
+    <div class="answer">AGENT</div>
+      </div>
+</div>
+
+
+
+</div>
+
+<!-- ===== RELATION 4 ===== --> 
+<div class="relation" data-max="2">
+  <h2>
+    Entiteten manifestation kan enbart ha två av dessa attribut – välj ett av dem?
+  </h2>
+
+  <div class="answers">
+    <div class="answer">Läge</div>
+    <div class="answer correct">Kategori</div>
+    <div class="answer">Nomensträng</div>
+    <div class="answer">Kontaktuppgifter</div>
+    <div class="answer correct">Omfång</div>
+  </div>
+</div>
+
+
+
+<!-- ===== IDENTIFIERARE ===== -->
+<div class="relation">
+  <h2>
+    Du vill entydigt identifiera en  <em>vetenskaplig</em> författare (forskare) i en internationell katalog.
+    Vilken identifierare är mest lämplig för det ändamålet?
+  </h2>
+
+  <div class="answers click-group" data-max="1" data-correct="orcid">
+    <div class="answer">ISBN</div>
+    <div class="answer">ISSN</div>
+    <div class="answer correct">ORCID</div>
+    <div class="answer">Hyllsignum</div>
+  </div>
+</div>
+
+<div class="relation" data-max="1">
+  <h2>
+    Vilket av följande attribut särskiljer de två homonymerna ”Paris” och "Paris" (stad/person)?
+  </h2>
+
+  <div class="answers">
+    <div class="answer">Åtkomstvillkor</div>
+    <div class="answer">Användarrättigheter</div>
+    <div class="answer">Omfång</div>
+    <div class="answer correct">Referens</div>
+  </div>
+</div>
+
+<!-- ===== LRM: ANVÄNDARKRAV ===== -->
+<div class="relation" data-max="2">
+  <h2>
+    Enligt IFLA:s LRM-rapport finns det fem så kallade "användarsysslor".</h2>
+    <h2>Tre av dessa är är <em>Select</em>, <em>Obtain</em> och
+    <em>Explore</em>.</h2>
+    <h2>Vilka är de andra två?</h2>
+  </h3>
+  <div class="answers">
+    <div class="answer correct">Identify</div>
+    <div class="answer">Access</div>
+    <div class="answer correct">Find</div>
+    <div class="answer">Use</div>
+    <div class="answer">Discover</div>
+    <div class="answer">Eat</div>
+  </div>
+</div>
+
+<!-- ===== LRM: ANVÄNDARUPPGIFT ===== -->
+<div class="relation" data-max="1">
+  <h2>
+    Vilken användarsyssla är det som avses här (citerat från LRM-rapporten)?
+  </h2>
+    <h2><span class="red">To facilitate this task, the information system seeks to clearly describe the
+    resources it covers. The description should be recognizable to the user and
+    easily interpreted.</span></h2>
+
+
+  <div class="answers">
+    <div class="answer">Find</div>
+    <div class="answer correct">Identify</div>
+    <div class="answer">Select</div>
+    <div class="answer">Obtain</div>
+    <div class="answer">Explore</div>
+  </div>
+</div>
+
+<!-- ===== LRM: ANVÄNDARUPPGIFT 2 ===== -->
+<div class="relation" data-max="1">
+  <h2>
+    Och här?
+  </h2>
+    <h2><span class="red">To fulfill this task, the information system needs to either provide
+direct links to online information, or location information for physical
+resources, as well as any instructions and access information required
+to complete the transaction or any restrictions on access.</span></h2>
+
+
+  <div class="answers">
+    <div class="answer">Find</div>
+    <div class="answer">Identify</div>
+    <div class="answer">Select</div>
+    <div class="answer correct">Obtain</div>
+    <div class="answer">Explore</div>
+  </div>
+</div>
+
+<div class="buttons">
+  <button onclick="checkAll()">Kontrollera svar</button>
+  <button onclick="resetAll()">Återställ alla svar</button>
+</div>
+
+<div id="feedback"></div>
+</div>
+<!-- ===== 8-BIT WIN SCREEN ===== -->
+<div id="retroWin" class="hidden">
+  <div class="retro-box">
+    <h1 class="blink">YOU WIN!</h1>
+    <p>POÄNG</p>
+    <p id="scoreCount">0</p>
+    <p class="press">PRESS START</p>
+  </div>
+</div>
+
+<script>
+let dragged = null;
+
+/* ========= FRÅGA 1 – ENTITETER (OFÖRÄNDRAD) ========= */
+document.querySelectorAll('#entityAnswers .answer').forEach(a => {
+  a.addEventListener('dragstart', () => dragged = a);
+});
+
+document.querySelectorAll('.category .answer-slot').forEach(slot => {
+  slot.addEventListener('dragover', e => e.preventDefault());
+  slot.addEventListener('drop', e => {
+    e.preventDefault();
+    slot.innerHTML = '';
+    slot.appendChild(dragged);
+  });
+});
+
+/* ========= ENTITETSFRÅGA: KLICK = ÅNGRA ========= */
+document.querySelectorAll('#entityAnswers .answer, .category .answer-slot .answer')
+  .forEach(a => {
+    a.addEventListener('click', () => {
+      a.classList.remove('selected', 'right', 'wrong');
+      document.getElementById('entityAnswers').appendChild(a);
+    });
+  });
+
+
+
+/* ========= KLICKVAL MED MAX-GRÄNS ========= */
+document.querySelectorAll('.relation .answer').forEach(answer => {
+  answer.addEventListener('click', () => {
+    const relation = answer.closest('.relation');
+    const max = parseInt(relation.dataset.max || '1', 10);
+    const selected = Array.from(
+      relation.querySelectorAll('.answer.selected')
+    );
+
+    // Klick på redan valt → ångra
+    if (answer.classList.contains('selected')) {
+      answer.classList.remove('selected');  
+      return;
+    }
+
+    // Om max = 1 → byt direkt
+    if (max === 1) {
+      selected.forEach(a => a.classList.remove('selected'));
+      answer.classList.add('selected');
+      return;
+    }
+
+    // Om max > 1 och fullt → ta bort äldsta
+    if (selected.length >= max) {
+      selected[0].classList.remove('selected');
+    }
+
+    answer.classList.add('selected');
+  });
+});
+
+
+
+function showRetroWin(finalScore) {
+  const retroWin = document.getElementById("retroWin");
+  const scoreDisplay = document.getElementById("scoreCount");
+
+  retroWin.classList.remove("hidden");
+  countScore(finalScore);
+}
+
+function countScore(finalScore) {
+  let current = 0;
+  const scoreDisplay = document.getElementById("scoreCount");
+
+  const interval = setInterval(() => {
+    current++;
+    scoreDisplay.textContent = current;
+
+    if (current >= finalScore) {
+      clearInterval(interval);
+    }
+  }, 40); // retro speed
+}
+
+
+/* ===== KONTROLLERA SVAR ===== */
+function showRetroWin(finalScore) {
+  const retroWin = document.getElementById("retroWin");
+  retroWin.classList.remove("hidden");
+  countScore(finalScore);
+}
+
+function countScore(finalScore) {
+  let current = 0;
+  const scoreDisplay = document.getElementById("scoreCount");
+
+  const interval = setInterval(() => {
+    current++;
+    scoreDisplay.textContent = current;
+
+    if (current >= finalScore) {
+      clearInterval(interval);
+    }
+  }, 40);
+}
+
+const retroWin = document.getElementById("retroWin");
+
+retroWin.addEventListener("click", () => {
+  retroWin.classList.add("hidden");
+});
+
+
+function checkAll() {
+  let correctChosen = [];
+  let wrongChosen = [];
+  let missedCorrect = [];
+  let score = 0;
+  let maxScore = 0;
+
+  document.querySelectorAll('.relation').forEach((rel, index) => {
+    if (rel.dataset.type === 'entity') return;
+
+    const selected = rel.querySelectorAll('.answer.selected');
+    const correct = rel.querySelectorAll('.answer.correct');
+
+    maxScore += correct.length;
+
+    selected.forEach(ans => {
+      if (ans.classList.contains('correct')) {
+        score++;
+      }
+    });
+
+    selected.forEach(ans => {
+      const text = ans.textContent.trim();
+      if (ans.classList.contains('correct')) {
+        correctChosen.push(`Fråga ${index + 1}: ${text}`);
+      } else {
+        wrongChosen.push(`Fråga ${index + 1}: ${text}`);
+      }
+    });
+
+    correct.forEach(ans => {
+      if (!ans.classList.contains('selected')) {
+        missedCorrect.push(`Fråga ${index + 1}: ${ans.textContent.trim()}`);
+      }
+    });
+  });
+
+  /* ===== ENTITETSFRÅGAN (DRAG & DROP) ===== */
+  let entityCorrect = 0;
+  let entityTotal = 0;
+
+  document.querySelectorAll('.category .answer-slot').forEach(slot => {
+    const expectedCat = slot.dataset.cat;
+    const answer = slot.querySelector('.answer');
+
+    if (!answer) return;
+
+    entityTotal++;
+
+    if (answer.dataset.cat === expectedCat) {
+      entityCorrect++;
+    }
+  });
+
+  score += entityCorrect;
+  maxScore += entityTotal;
+
+  /* ===== RESULTATHTML ===== */
+  let html = `
+    <h2>Resultat</h2>
+    <h3>Poäng: ${score} / ${maxScore}</h3>
+  `;
+
+  html += `✅ <b>Rätta val</b><ul>`;
+  html += correctChosen.length
+    ? correctChosen.map(t => `<li>${t}</li>`).join('')
+    : `<li>Inga</li>`;
+  html += `</ul>`;
+
+  html += `❌ <b>Felaktiga val</b><ul>`;
+  html += wrongChosen.length
+    ? wrongChosen.map(t => `<li>${t}</li>`).join('')
+    : `<li>Inga</li>`;
+  html += `</ul>`;
+
+  html += `🔹 <b>Rätta svar som inte valdes</b><ul>`;
+  html += missedCorrect.length
+    ? missedCorrect.map(t => `<li>${t}</li>`).join('')
+    : `<li>Inga</li>`;
+  html += `</ul>`;
+
+  document.getElementById('feedback').innerHTML = html;
+
+  /* ===== 8-BIT WIN CONDITION ===== */
+  console.log("Score:", score);
+
+  if (score >= 30) {
+    showRetroWin(score);
+  }
+}
+
+
+
+/* ===== ÅTERSTÄLL ===== */
+function resetAll() {
+  document.querySelectorAll('.answer').forEach(a => {
+    a.classList.remove('selected');
+    if (a.dataset.origin) {
+      document.getElementById(a.dataset.origin).appendChild(a);
+    }
+  });
+
+  document.querySelectorAll('.excel-cell').forEach(c => c.value = '');
+  document.getElementById('feedback').innerHTML = '';
+}
+
+document.addEventListener("keydown", () => {
+  const retroWin = document.getElementById("retroWin");
+  if (!retroWin.classList.contains("hidden")) {
+    retroWin.classList.add("hidden");
+  }
+});
+
+</script>
+
+
+
+</body>
+</html>
+
