@@ -2,6 +2,7 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LRM och sånt</title>
 
 <style>
@@ -266,6 +267,7 @@ button {
 .red {
   color: red;
   }
+  
  
  /* ===== 8-BIT RETRO WIN SCREEN ===== */
 #retroWin.hidden {
@@ -315,7 +317,15 @@ button {
   from { transform: scale(0); }
   to { transform: scale(1); }
 }
+/* ===== MOBIL: markerat entitetssvar ===== */
+  .answer.entity-selected {
+    outline: 3px solid #0984e3;
+    background: #dfe6e9;
+  }
 
+  .category .answer-slot {
+    cursor: pointer;
+  }
   
 </style>
 </head>
@@ -380,15 +390,15 @@ button {
 <h3>Ett angivet svar kan ångras om du <em>klickar</em> på det (det går tyvärr inte att dra tillbaka ett angivet svar).</h3>
 <!-- ===== ENTITETSSVAR ===== -->
 <div class="answers" id="entityAnswers">
-  <div class="answer" draggable="true" data-origin="entityAnswers" data-cat="Verk">Idén om det litterära verket <em>Gösta Berlings saga</em></div>
-  <div class="answer" draggable="true" data-origin="entityAnswers" data-cat="Uttryck">Den svenska texten av <em>Gösta Berlings saga</em>, ©1891</div>
-  <div class="answer" draggable="true" data-origin="entityAnswers" data-cat="Manifestation">1891 års häftade utgåva av GBS med ISBN x</div>
-  <div class="answer" draggable="true" data-origin="entityAnswers" data-cat="Exemplar">Den fysiska, solblekta kopian av GBS i din bokhylla</div>
-  <div class="answer" draggable="true" data-origin="entityAnswers" data-cat="Person">Selma Lagerlöf (människan)</div>
-  <div class="answer" draggable="true" data-origin="entityAnswers" data-cat="Kollektiv">Albert Bonniers Förlag</div>
-  <div class="answer" draggable="true" data-origin="entityAnswers" data-cat="Nomen">"Selma Lagerlöf"</div>
-  <div class="answer" draggable="true" data-origin="entityAnswers" data-cat="Plats">Stockholm</div>
-  <div class="answer" draggable="true" data-origin="entityAnswers" data-cat="Tid">1891</div>
+  <div class="answer" data-origin="entityAnswers" data-cat="Verk">Idén om det litterära verket <em>Gösta Berlings saga</em></div>
+  <div class="answer" data-origin="entityAnswers" data-cat="Uttryck">Den svenska texten av <em>Gösta Berlings saga</em>, ©1891</div>
+  <div class="answer" data-origin="entityAnswers" data-cat="Manifestation">1891 års häftade utgåva av GBS med ISBN x</div>
+  <div class="answer" data-origin="entityAnswers" data-cat="Exemplar">Den fysiska, solblekta kopian av GBS i din bokhylla</div>
+  <div class="answer" data-origin="entityAnswers" data-cat="Person">Selma Lagerlöf (människan)</div>
+  <div class="answer" data-origin="entityAnswers" data-cat="Kollektiv">Albert Bonniers Förlag</div>
+  <div class="answer" data-origin="entityAnswers" data-cat="Nomen">"Selma Lagerlöf"</div>
+  <div class="answer" data-origin="entityAnswers" data-cat="Plats">Stockholm</div>
+  <div class="answer" data-origin="entityAnswers" data-cat="Tid">1891</div>
 </div></div>
 
 <!-- ===== KATEGORIER ===== -->
@@ -638,21 +648,52 @@ to complete the transaction or any restrictions on access.</span></h2>
 </div>
 
 <script>
-let dragged = null;
+let selectedEntity = null;
 
-/* ========= FRÅGA 1 – ENTITETER (OFÖRÄNDRAD) ========= */
-document.querySelectorAll('#entityAnswers .answer').forEach(a => {
-  a.addEventListener('dragstart', () => dragged = a);
+
+// Klicka på entitetssvar = välj
+function bindEntityAnswers() {
+document.querySelectorAll('#entityAnswers .answer, .category .answer-slot .answer')
+.forEach(a => {
+a.addEventListener('click', () => {
+// Ångra om den redan är placerad
+if (a.parentElement.classList.contains('answer-slot')) {
+a.classList.remove('entity-selected');
+document.getElementById('entityAnswers').appendChild(a);
+selectedEntity = null;
+return;
+}
+
+
+document.querySelectorAll('.entity-selected')
+.forEach(x => x.classList.remove('entity-selected'));
+
+
+selectedEntity = a;
+a.classList.add('entity-selected');
 });
+});
+}
 
+
+// Klicka på kategori = placera
+function bindCategorySlots() {
 document.querySelectorAll('.category .answer-slot').forEach(slot => {
-  slot.addEventListener('dragover', e => e.preventDefault());
-  slot.addEventListener('drop', e => {
-    e.preventDefault();
-    slot.innerHTML = '';
-    slot.appendChild(dragged);
-  });
+slot.addEventListener('click', () => {
+if (!selectedEntity) return;
+
+
+slot.innerHTML = '';
+slot.appendChild(selectedEntity);
+selectedEntity.classList.remove('entity-selected');
+selectedEntity = null;
 });
+});
+}
+
+
+bindEntityAnswers();
+bindCategorySlots();
 
 /* ========= ENTITETSFRÅGA: KLICK = ÅNGRA ========= */
 document.querySelectorAll('#entityAnswers .answer, .category .answer-slot .answer')
