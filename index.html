@@ -876,7 +876,25 @@ function checkAll() {
   }
 }
 
+// ===== FRÅGA 5: ENTITETER =====
+document.querySelectorAll('.answer-slot').forEach(slot => {
+  const correctCategory = slot.dataset.cat;      // t.ex. "Verk"
+  const answer = slot.querySelector('.answer');  // ev. placerat svar
+  const categoryDiv = slot.parentElement;        // .category
 
+  // inget svar placerat
+  if (!answer) {
+    categoryDiv.classList.add('wrong');
+    return;
+  }
+
+  // jämför svar med kategori
+  if (answer.dataset.cat === correctCategory) {
+    categoryDiv.classList.add('right');
+  } else {
+    categoryDiv.classList.add('wrong');
+  }
+});
 
 /* ===== ÅTERSTÄLL ===== */
 function resetAll() {
