@@ -427,32 +427,6 @@ button {
 </div>
 </div>
 
-<!-- ===== IDENTIFIERARE ===== -->
-<div class="relation" data-max="1">
-  <h2>
-    Vad är syftet med LRM?
-  </h2>
-  <div class="answers click-group" data-max="1"</div>
-    <div class="answer">Att definiera ett metadataformat för bibliografiska poster</div>
-    <div class="answer">Att fungera som en övergripande konceptuell referensmodell</div>
-    <div class="answer correct">Att ersätta RDA som standard för resursbeskrivning</div>
-  </div>
-</div>
-  
-<!-- ===== LRM: ENTITETER VS ATTRIBUT ===== -->
-<div class="relation" data-max="2">
-  <h2>
-    Vilka är de två <em>attributen</em> av följande alternativ?
-  </h2>
-
-  <div class="answers">
-    <div class="answer">Agent</div>
-    <div class="answer correct">Utgivningsår</div>
-    <div class="answer">Nomen</div>
-    <div class="answer correct">Omfång</div>
-  </div>
-</div>
-
 <!-- ===== FRÅGA 2 ===== -->
 <div class="relation" data-max="2">
 <h2>Enbart <em>två</em> av dessa påståenden är korrekta, vilka?</h2>
@@ -468,6 +442,32 @@ button {
   </div>
   <div class="answer">
     Ett exemplar är en abstrakt konstnärlig skapelse.</div>
+  </div>
+</div>
+  
+<!-- ===== IDENTIFIERARE ===== -->
+<div class="relation" data-max="1">
+  <h2>
+    Vad är syftet med LRM?
+  </h2>
+  <div class="answers click-group" data-max="1"</div>
+    <div class="answer">Att definiera ett metadataformat för bibliografiska poster.</div>
+    <div class="answer">Att fungera som en övergripande konceptuell referensmodell.</div>
+    <div class="answer correct">Att ersätta RDA som standard för resursbeskrivning.</div>
+  </div>
+</div>
+  
+<!-- ===== LRM: ENTITETER VS ATTRIBUT ===== -->
+<div class="relation" data-max="2">
+  <h2>
+    Vilka är de två <em>attributen</em> av följande alternativ?
+  </h2>
+
+  <div class="answers">
+    <div class="answer">Agent</div>
+    <div class="answer correct">Utgivningsår</div>
+    <div class="answer">Nomen</div>
+    <div class="answer correct">Omfång</div>
   </div>
 </div>
 
@@ -514,7 +514,7 @@ button {
   </h2>
 
   <div class="answers">
-    <div class="answer">Att relationen och dess invers är av samma slag (X är likvärdigt med Y/)</div>
+    <div class="answer">Att relationen och dess invers är av samma slag (N1 är likvärdigt med N2)</div>
     <div class="answer correct">Att samma typ av entitet är både domän och räckvidd i relationen (Verk - Verk)</div>
   </div>
 </div>
@@ -575,18 +575,30 @@ button {
 
 <div class="relation" data-max="1">
   <h2>
-    Vilket av följande attribut särskiljer de två homonymerna ”Paris” och "Paris" (stad/person)?
+    Vilken/vilka entitet(er) kan <span class="underline">ha</span>a ett <em>ämne</em> (kan vara domän i relationen <em>X handlar om Y)</em>?
   </h2>
 
   <div class="answers">
-    <div class="answer">Åtkomstvillkor</div>
-    <div class="answer">Användarrättigheter</div>
-    <div class="answer">Omfång</div>
-    <div class="answer correct">Referens</div>
+    <div class="answer">Nomen</div>
+    <div class="answer">Agent</div>
+    <div class="answer correct">Verk</div>
+    <div class="answer>Samtliga</div>
   </div>
 </div>
 
+      
+<div class="relation" data-max="1">
+  <h2>
+    Vilken/vilka entitet(er) kan <span class="underline">vara</span>a ett <em>ämne</em> (kan vara domän i relationen <em>X är det som Y handlar om)</em>?
+  </h2>
 
+  <div class="answers">
+    <div class="answer">Nomen</div>
+    <div class="answer">Agent</div>
+    <div class="answer correct">Verk</div>
+    <div class="answer>Samtliga</div>
+  </div>
+</div>
 
 <div class="buttons">
   <button onclick="checkAll()">Kontrollera svar</button>
